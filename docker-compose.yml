@@ -1,0 +1,25 @@
+version: "3"
+volumes:
+  postgres15.1-postgis3.3:
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: postgres15.1-postgis3.3
+    container_name: postgres15.1-postgis3.3
+    volumes:
+      - postgres15.1-postgis3.3:/var/lib/postgresql/data
+      - ./backups:/opt/backups
+    environment:
+      - POSTGRES_PASSWORD=adminpassword
+      - READ_LOGIN=reader
+      - READ_PASSWORD=readerpassword
+    networks:
+    - postgres_conn
+    ports:
+    - "5432:5432"
+
+networks:
+  postgres_conn:
+    driver: bridge
