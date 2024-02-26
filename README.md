@@ -6,48 +6,18 @@ This is the base Docker image we use for Postgres/PostGIS. It also includes ogr_
 
 There are three things you should edit before you start the docker container for the first time.
 
-`docker-compose.yml` includes the PG admin password as well as a read-only login and password for the GIS database. You should change these.
+`docker-compose.yml` includes the PG admin password, a read-only login and password for the GIS database, and performance tuning options from [PGTune](https://pgtune.leopard.in.ua/). You should change these to fit your needs.
 
-```yaml 
-environment:
-  - POSTGRES_PASSWORD=adminpassword
-  - READ_LOGIN=reader
-  - READ_PASSWORD=readerpassword
-```
+The top of the `Dockerfile` has the Postgres Major:Minor version, the PostGIS major version, and the time zone. Set those as needed. You can find the Postgres versions available on the [official Docker postgres page](https://hub.docker.com/_/postgres).
 
-The top of the `Dockerfile` has the Postgres Major:Minor version, the PostGIS major version, and the time zone. Set those as needed. 
+```docker
+FROM postgres:16
 
-```dockerfile 
-FROM postgres:15.1
-
-ENV POSTGISV 3
+ENV POSTGIS_MAJOR 3
 ENV TZ America/New_York
 ```
 
-`initdb-postgis.sh` contains all the commands that initialize the Postgres server and database settings. Included in that is server configuration tweaks based on your hardware. If you don't know what you're doing here, I'd recommend using [PGtune](https://pgtune.leopard.in.ua/).
-
-```bash
-# https://pgtune.leopard.in.ua/
-# DB Version: 15
-# OS Type: linux
-# DB Type: web
-# Total Memory (RAM): 4 GB
-# CPUs num: 2
-# Connections num: 75
-# Data Storage: ssd
-psql -c "ALTER SYSTEM SET max_connections = '75';"
-psql -c "ALTER SYSTEM SET shared_buffers = '1GB';"
-psql -c "ALTER SYSTEM SET effective_cache_size = '3GB';"
-psql -c "ALTER SYSTEM SET maintenance_work_mem = '256MB';"
-psql -c "ALTER SYSTEM SET checkpoint_completion_target = '0.9';"
-psql -c "ALTER SYSTEM SET wal_buffers = '16MB';"
-psql -c "ALTER SYSTEM SET default_statistics_target = '100';"
-psql -c "ALTER SYSTEM SET random_page_cost = '1.1';"
-psql -c "ALTER SYSTEM SET effective_io_concurrency = '200';"
-psql -c "ALTER SYSTEM SET work_mem = '6990kB';"
-psql -c "ALTER SYSTEM SET min_wal_size = '1GB';"
-psql -c "ALTER SYSTEM SET max_wal_size = '4GB';"
-```
+`initdb-postgis.sh` contains all the commands that initialize the Postgres server and database settings. You should modify it as needed - create different databases and users, install different extensions, etc.
 
 ## Managing the service
 
