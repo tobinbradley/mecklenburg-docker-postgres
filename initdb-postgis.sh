@@ -3,26 +3,19 @@ set -e
 # Perform all actions as $POSTGRES_USER
 export PGUSER="$POSTGRES_USER"
 
-# https://pgtune.leopard.in.ua/
-# DB Version: 15
-# OS Type: linux
-# DB Type: web
-# Total Memory (RAM): 4 GB
-# CPUs num: 2
-# Connections num: 75
-# Data Storage: ssd
-psql -c "ALTER SYSTEM SET max_connections = '75';"
-psql -c "ALTER SYSTEM SET shared_buffers = '1GB';"
-psql -c "ALTER SYSTEM SET effective_cache_size = '3GB';"
-psql -c "ALTER SYSTEM SET maintenance_work_mem = '256MB';"
-psql -c "ALTER SYSTEM SET checkpoint_completion_target = '0.9';"
-psql -c "ALTER SYSTEM SET wal_buffers = '16MB';"
-psql -c "ALTER SYSTEM SET default_statistics_target = '100';"
-psql -c "ALTER SYSTEM SET random_page_cost = '1.1';"
-psql -c "ALTER SYSTEM SET effective_io_concurrency = '200';"
-psql -c "ALTER SYSTEM SET work_mem = '6990kB';"
-psql -c "ALTER SYSTEM SET min_wal_size = '1GB';"
-psql -c "ALTER SYSTEM SET max_wal_size = '4GB';"
+# system tuning
+psql -c "ALTER SYSTEM SET max_connections = '$MAX_CONNECTIONS';"
+psql -c "ALTER SYSTEM SET shared_buffers = '$SHARED_BUFFERS';"
+psql -c "ALTER SYSTEM SET effective_cache_size = '$EFFECTIVE_CACHE_SIZE';"
+psql -c "ALTER SYSTEM SET maintenance_work_mem = '$MAINTENANCE_WORK_MEM';"
+psql -c "ALTER SYSTEM SET checkpoint_completion_target = '$CHECKPOINT_COMPLETION_TARGET';"
+psql -c "ALTER SYSTEM SET wal_buffers = '$WAL_BUFFERS';"
+psql -c "ALTER SYSTEM SET default_statistics_target = '$DEFAULT_STATISTICS_TARGET';"
+psql -c "ALTER SYSTEM SET random_page_cost = '$RANDOM_PAGE_COST';"
+psql -c "ALTER SYSTEM SET effective_io_concurrency = '$EFFECTIVE_IO_CONCURRENCY';"
+psql -c "ALTER SYSTEM SET work_mem = '$WORK_MEM';"
+psql -c "ALTER SYSTEM SET min_wal_size = '$MIN_WAL_SIZE';"
+psql -c "ALTER SYSTEM SET max_wal_size = '$MAX_WAL_SIZE';"
 
 # add postgrereader user
 psql -c "CREATE USER $READ_LOGIN WITH PASSWORD '$READ_PASSWORD';"
