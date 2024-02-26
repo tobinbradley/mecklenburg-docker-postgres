@@ -1,6 +1,6 @@
-FROM postgres:15.1
+FROM postgres:16.2
 
-ENV POSTGISV 3
+ENV POSTGIS_MAJOR 3
 ENV TZ America/New_York
 
 # add addressing dictionary
@@ -8,8 +8,8 @@ RUN mkdir -p /opt/apps
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-  postgresql-$PG_MAJOR-postgis-$POSTGISV \
-  postgresql-$PG_MAJOR-postgis-$POSTGISV-scripts \
+  postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
+  postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
   postgresql-server-dev-$PG_MAJOR \
   postgresql-$PG_MAJOR-ogr-fdw \
   ca-certificates \
